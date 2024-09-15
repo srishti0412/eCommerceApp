@@ -6,8 +6,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
 @RestController
 public class CategoryController {
 
@@ -45,16 +43,20 @@ public class CategoryController {
          return new ResponseEntity<>(msg,HttpStatus.OK);
      }
 
-     @PutMapping("/api/public/categories/{category_id}")
-     public ResponseEntity<String> UpdateCategories(@RequestBody Category updatedcategory,@PathVariable Long category_id)
-     {
-         try {
-             Category savedCategory=cs.UpdateCategory(updatedcategory, category_id);
 
-             return new ResponseEntity<>("Updated category successfully", HttpStatus.OK);
-         } catch (Exception e) {
-             return new ResponseEntity<>("Failed to update category. " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
-         }
-//         return "Updated category successfully";
+     @PutMapping("/api/public/categories/{category_id}")
+     public ResponseEntity<CategoryDTO> UpdateCategories(@Valid @RequestBody CategoryDTO categoryDTO, @PathVariable Long category_id)
+     {
+//         try {
+//             CategoryDTO updatedCategory=cs.UpdateCategory(CategoryDTO, category_id);
+//
+//             return new ResponseEntity<>("Updated category successfully", HttpStatus.OK);
+//         } catch (Exception e) {
+//             return new ResponseEntity<>("Failed to update category. " + e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR);
+//         }
+////         return "Updated category successfully";
+
+         CategoryDTO savedCategoryDTO = cs.UpdateCategory(categoryDTO, category_id);
+         return new ResponseEntity<>(savedCategoryDTO, HttpStatus.OK);
      }
 }
