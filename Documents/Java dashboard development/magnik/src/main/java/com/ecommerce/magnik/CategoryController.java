@@ -49,7 +49,7 @@ public class CategoryController {
      public ResponseEntity<String> UpdateCategories(@RequestBody Category updatedcategory,@PathVariable Long category_id)
      {
          try {
-             cs.UpdateCategory(updatedcategory, category_id);
+             Category savedCategory=cs.UpdateCategory(updatedcategory, category_id);
 
              return new ResponseEntity<>("Updated category successfully", HttpStatus.OK);
          } catch (Exception e) {

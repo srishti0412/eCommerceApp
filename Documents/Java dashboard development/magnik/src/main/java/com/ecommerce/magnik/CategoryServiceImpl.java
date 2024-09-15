@@ -66,7 +66,7 @@ public class CategoryServiceImpl implements  CategoryService{
     }
 //
     @Override
-    public void UpdateCategory(Category updatedcategory, Long category_id)
+    public Category UpdateCategory(Category updatedcategory, Long category_id)
     {
 //        List<Category>categories=categoryRepository.findAll();
 //
@@ -84,6 +84,6 @@ public class CategoryServiceImpl implements  CategoryService{
         existingCategory.setCategoryName(updatedcategory.getCategoryName());
 
         categoryRepository.save(existingCategory);
-//       return ct;
+        return existingCategory;
     }
 }
