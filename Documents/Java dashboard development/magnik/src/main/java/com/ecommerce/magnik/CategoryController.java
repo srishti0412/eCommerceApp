@@ -38,21 +38,21 @@ public class CategoryController {
 
 
     @GetMapping("/public/categories")
-    public ResponseEntity<CategoryResponse> getAllCategories( @RequestParam(name = "pageNumber") Integer pageNumber,
-                                                              @RequestParam(name = "pageSize") Integer pageSize){
+    public ResponseEntity<CategoryResponse> getAllCategories( @RequestParam(name = "pageNumber",defaultValue = AppConstant.PAGE_NUMBER,required = false) Integer pageNumber,
+                                                              @RequestParam(name = "pageSize",defaultValue = AppConstant.PAGE_SIZE,required = false) Integer pageSize){
         CategoryResponse CategoryResponse = cs.getAllCategories(pageNumber,pageSize);
         return new ResponseEntity<>(CategoryResponse, HttpStatus.OK);
      }
 
-     @DeleteMapping("/api/public/categories/{category_id}")
+     @DeleteMapping("/public/categories/{category_id}")
      public ResponseEntity<CategoryDTO>  DeleteCategory(@PathVariable Long category_id)
      {
-         CategoryDTO categoryDTO=cs.DeleteCategory(category_id);
-         return new ResponseEntity<>(categoryDTO,HttpStatus.OK);
+         CategoryDTO deletedCategory=cs.DeleteCategory(category_id);
+         return new ResponseEntity<>(deletedCategory,HttpStatus.OK);
      }
 
 
-     @PutMapping("/api/public/categories/{category_id}")
+     @PutMapping("/public/categories/{category_id}")
      public ResponseEntity<CategoryDTO> UpdateCategories(@Valid @RequestBody CategoryDTO categoryDTO, @PathVariable Long category_id)
      {
 //         try {
