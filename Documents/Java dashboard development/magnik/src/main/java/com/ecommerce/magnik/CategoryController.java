@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@RequestMapping("/api")
 public class CategoryController {
 
     @Autowired
@@ -17,8 +18,14 @@ public class CategoryController {
         this.cs = cs;
     }
 
+    @GetMapping("/echo")
+    public ResponseEntity<String> echoMessage(@RequestParam(name="message",defaultValue = "Hello World!")String message)
+    {
+        return new ResponseEntity<>("Echoed message: "+message,HttpStatus.OK);
+    }
+
     //@RequestMapping(value="/api/public/categories",method=RequestMethod.GET)
-    @PostMapping("/api/public/categories")
+    @PostMapping("/public/categories")
     public ResponseEntity<String> createCategories(@Valid @RequestBody Category category) {
         try {
             cs.createCategory(category);
@@ -30,17 +37,18 @@ public class CategoryController {
     }
 
 
-    @GetMapping("/api/public/categories")
-    public ResponseEntity<CategoryResponse> getAllCategories(){
-        CategoryResponse CategoryResponse = cs.getAllCategories();
+    @GetMapping("/public/categories")
+    public ResponseEntity<CategoryResponse> getAllCategories( @RequestParam(name = "pageNumber") Integer pageNumber,
+                                                              @RequestParam(name = "pageSize") Integer pageSize){
+        CategoryResponse CategoryResponse = cs.getAllCategories(pageNumber,pageSize);
         return new ResponseEntity<>(CategoryResponse, HttpStatus.OK);
      }
 
      @DeleteMapping("/api/public/categories/{category_id}")
-     public ResponseEntity<String>  DeleteCategory(@PathVariable Long category_id)
+     public ResponseEntity<CategoryDTO>  DeleteCategory(@PathVariable Long category_id)
      {
-         String msg=cs.DeleteCategory(category_id);
-         return new ResponseEntity<>(msg,HttpStatus.OK);
+         CategoryDTO categoryDTO=cs.DeleteCategory(category_id);
+         return new ResponseEntity<>(categoryDTO,HttpStatus.OK);
      }
 
 

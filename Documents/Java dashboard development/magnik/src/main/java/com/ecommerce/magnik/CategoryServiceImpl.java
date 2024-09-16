@@ -2,8 +2,12 @@ package com.ecommerce.magnik;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
@@ -23,9 +27,15 @@ public class CategoryServiceImpl implements  CategoryService{
     private ModelMapper modelMapper;
 
     @Override
-    public CategoryResponse getAllCategories(){
+    public CategoryResponse getAllCategories(@RequestParam(name = "pageNumber") Integer pageNumber,
+                                             @RequestParam(name = "pageSize") Integer pageSize){
 
-        List<Category>categories=categoryRepository.findAll();
+        Pageable pageDetails = PageRequest.of(pageNumber, pageSize);
+        Page<Category> categoryPage = categoryRepository.findAll(pageDetails);
+
+        List<Category> categories = categoryPage.getContent();
+
+        //List<Category>categories=categoryRepository.findAll();
         if (categories.isEmpty())
             throw new ApiException("No category created till now.");
 
@@ -33,8 +43,13 @@ public class CategoryServiceImpl implements  CategoryService{
                 .map(category -> modelMapper.map(category, CategoryDTO.class))
                 .toList();
 
-        CategoryResponse categoryResponse = new CategoryResponse();
+        CategoryResponse categoryResponse=new CategoryResponse();
         categoryResponse.setContent(categoryDTOS);
+        categoryResponse.setPageNumber(categoryPage.getNumber());
+        categoryResponse.setPageSize(categoryPage.getSize());
+        categoryResponse.setTotalElements(categoryPage.getTotalElements());
+        categoryResponse.setTotalPages(categoryPage.getTotalPages());
+        categoryResponse.setLastPage(categoryPage.isLast());
         return categoryResponse;
     }
 
@@ -54,14 +69,17 @@ public class CategoryServiceImpl implements  CategoryService{
     }
 
     @Override
-    public String DeleteCategory(Long categoryId) {
+    public CategoryDTO DeleteCategory(Long categoryId) {
 
         // Fetch category by ID and delete if it exists
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("Category", "categoryId", categoryId));
 
+
+
         categoryRepository.delete(category);
-        return "Category with id " + categoryId + " deleted successfully!";
+
+        return modelMapper.map(category,CategoryDTO.class);
 
     }
 //
