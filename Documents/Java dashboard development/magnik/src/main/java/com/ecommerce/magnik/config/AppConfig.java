@@ -1,4 +1,4 @@
-package com.ecommerce.magnik;
+package com.ecommerce.magnik.config;
 
 import org.modelmapper.ModelMapper;
 import org.springframework.context.annotation.Bean;

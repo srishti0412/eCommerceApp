@@ -1,20 +1,23 @@
-package com.ecommerce.magnik;
+package com.ecommerce.magnik.service;
 
+import com.ecommerce.magnik.exception.ApiException;
+import com.ecommerce.magnik.exception.ResourceNotFoundException;
+import com.ecommerce.magnik.model.Category;
+import com.ecommerce.magnik.payload.CategoryDTO;
+import com.ecommerce.magnik.payload.CategoryResponse;
+import com.ecommerce.magnik.repositories.CategoryRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
-public class CategoryServiceImpl implements  CategoryService{
+public class CategoryServiceImpl implements CategoryService {
 
     //private ArrayList<Category> categories=new ArrayList<>();
 

@@ -1,4 +1,4 @@
-package com.ecommerce.magnik;
+package com.ecommerce.magnik.exception;
 
 
 public class ResourceNotFoundException extends RuntimeException {

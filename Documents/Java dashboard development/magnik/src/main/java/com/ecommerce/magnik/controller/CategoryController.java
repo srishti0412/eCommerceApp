@@ -1,5 +1,10 @@
-package com.ecommerce.magnik;
+package com.ecommerce.magnik.controller;
 
+import com.ecommerce.magnik.model.Category;
+import com.ecommerce.magnik.payload.CategoryDTO;
+import com.ecommerce.magnik.payload.CategoryResponse;
+import com.ecommerce.magnik.service.CategoryService;
+import com.ecommerce.magnik.config.AppConstant;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -38,8 +43,8 @@ public class CategoryController {
 
 
     @GetMapping("/public/categories")
-    public ResponseEntity<CategoryResponse> getAllCategories( @RequestParam(name = "pageNumber",defaultValue = AppConstant.PAGE_NUMBER,required = false) Integer pageNumber,
-                                                              @RequestParam(name = "pageSize",defaultValue = AppConstant.PAGE_SIZE,required = false) Integer pageSize){
+    public ResponseEntity<CategoryResponse> getAllCategories(@RequestParam(name = "pageNumber",defaultValue = AppConstant.PAGE_NUMBER,required = false) Integer pageNumber,
+                                                             @RequestParam(name = "pageSize",defaultValue = AppConstant.PAGE_SIZE,required = false) Integer pageSize){
         CategoryResponse CategoryResponse = cs.getAllCategories(pageNumber,pageSize);
         return new ResponseEntity<>(CategoryResponse, HttpStatus.OK);
      }

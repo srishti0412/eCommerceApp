@@ -1,4 +1,4 @@
-package com.ecommerce.magnik;
+package com.ecommerce.magnik.config;
 
 public class AppConstant {
 
