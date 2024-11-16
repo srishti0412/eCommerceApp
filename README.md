@@ -166,8 +166,3 @@ For production environments, make sure to:
 This project demonstrates how to implement authentication and authorization using JWT and cookies in a Spring Boot application. It also showcases how to use Spring Security to enforce role-based access control, providing a secure way to protect sensitive resources.
 
 ---
-
-### Notes:
-1. Replace `https://github.com/yourusername/ecommerce-jwt-auth.git` with the actual repository URL.
-2. Add any additional features you want to showcase, such as tests, deployments, etc.
-3. Feel free to customize this README to fit your project's needs better.
