@@ -2,13 +2,10 @@ package com.ecommerce.magnik.service;
 
 import com.ecommerce.magnik.exception.ApiException;
 import com.ecommerce.magnik.exception.ResourceNotFoundException;
-import com.ecommerce.magnik.model.Cart;
 import com.ecommerce.magnik.model.Category;
 import com.ecommerce.magnik.model.Product;
-import com.ecommerce.magnik.payload.CartDTO;
 import com.ecommerce.magnik.payload.ProductDTO;
 import com.ecommerce.magnik.payload.ProductResponse;
-import com.ecommerce.magnik.repositories.CartRepository;
 import com.ecommerce.magnik.repositories.CategoryRepository;
 import com.ecommerce.magnik.repositories.ProductRepository;
 import org.modelmapper.ModelMapper;
@@ -16,7 +13,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class ProductServiceImpl implements ProductService{
@@ -28,13 +24,7 @@ public class ProductServiceImpl implements ProductService{
     private CategoryRepository categoryRepository;
 
     @Autowired
-    private CartRepository cartRepository;
-
-    @Autowired
     private ModelMapper modelMapper;
-
-    @Autowired
-    private CartService cartService;
 
     @Override
     public ProductDTO addProduct(Long categoryId, ProductDTO productDTO) {
@@ -126,26 +116,6 @@ public class ProductServiceImpl implements ProductService{
         existing_product.setSpecialPrice(product.getSpecialPrice());
 
         Product savedProduct=productRepository.save(existing_product);
-
-        /*new code*/
-        List<Cart>carts=cartRepository.findCartsByProductId(productId);
-
-        List<CartDTO> cartDTOS = carts.stream().map(cart->{
-            CartDTO cartDTO=modelMapper.map(cart, CartDTO.class);
-
-            List<ProductDTO> products = cart.getCartItems().stream()
-                    .map(p->modelMapper.map(p.getProduct(),ProductDTO.class)).collect(Collectors.toList());
-
-            cartDTO.setProducts(products);
-
-            return cartDTO;
-
-
-        }).collect(Collectors.toList());
-
-        cartDTOS.forEach(cart -> cartService.updateProductInCarts(cart.getCartId(), productId));
-
-        /*end of new code*/
         return modelMapper.map(savedProduct,ProductDTO.class);
     }
 
@@ -155,17 +125,9 @@ public class ProductServiceImpl implements ProductService{
         Product product=productRepository.findById(productId)
                 .orElseThrow(() -> new ResourceNotFoundException("Product", "productId", productId));
 
-
-        //new code
-        List<Cart>carts=cartRepository.findCartsByProductId(productId);
-        carts.forEach(cart->cartService.deleteProductFromCart(cart.getCartId() ,productId));
-        //end of new code
-
         productRepository.delete(product);
 
         return modelMapper.map(product,ProductDTO.class);
 
     }
-
-
 }
